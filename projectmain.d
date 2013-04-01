@@ -1,0 +1,10 @@
+projectmain.o: sources\ProjectMain.c
+projectmain.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+projectmain.o: sources\.\basic\system_stm32f4xx.h
+projectmain.o: sources\.\basic\stm32f4xx.h
+projectmain.o: sources\.\basic\core_cm4.h
+projectmain.o: sources\.\basic\core_cmInstr.h
+projectmain.o: sources\.\basic\core_cmFunc.h
+projectmain.o: sources\.\basic\core_cm4_simd.h
+projectmain.o: sources\.\basic\core_cm4.h
+projectmain.o: sources\.\drivers\LED.h

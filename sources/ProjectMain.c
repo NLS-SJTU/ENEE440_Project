@@ -87,6 +87,7 @@ uint32_t BTN_Get(void) {
 //void asmLED_init(void);	//""
 //void asmBTN_init(void);	//""
 //void ST_LED_init(void); 	//initialize onboard LEDs of ST32F4DISCOVERY board
+//Done in asm ^
 //void ST_BTN_init(void);  	//initialize onboard switches of ST32F4DISCOVERY board
 //uint32_t ST_BTN_Get(void);	//read onboard button of ST32F4DISCOVERY board
 //void ST_P24DISPLAY_init(void);	//initialize ST32F4 pins controlling P24 display pins
@@ -165,7 +166,7 @@ int main (void) {
 //		btns = ST_BTN_Get();                      // Read button states         
 //		btns = ST_BTN_Get();                      // Read button states 
 //		if (btns != (1UL << 0)) { // Calculate 'num': 0,1,...,LED_NUM-1,LED_NUM-1,...,1,0,0,...  
-/*
+
 			num += dir;
 			if (num == LED_NUM) { dir = -1; num =  LED_NUM-1; } 
 			else if   (num < 0) { dir =  1; num =  0;         }
@@ -174,7 +175,7 @@ int main (void) {
 			Delay( 50);                               // Delay 50ms                 
 			LED_Off(num);
 			Delay(200); 
-*/			// Delay 200ms            
+			// Delay 200ms            
 //		}
 //		else {
 //			LED_Out (0x0F);

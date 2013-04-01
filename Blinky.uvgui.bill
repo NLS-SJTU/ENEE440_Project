@@ -2514,24 +2514,6 @@
     </ViewEx>
   </WinLayoutEx>
 
-  <AlienFiles>
-    <Doc>
-      <Name>C:\Users\Gauxonz\Documents\ENEE440\Project\sources\ProjectMain.c</Name>
-      <ColumnNumber>0</ColumnNumber>
-    </Doc>
-  </AlienFiles>
+  <AlienFiles/>
 
-  <MDIGroups>
-    <Orientation>1</Orientation>
-    <ActiveMDIGroup>0</ActiveMDIGroup>
-    <MDIGroup>
-      <Size>100</Size>
-      <ActiveTab>1</ActiveTab>
-      <Doc>
-        <Name>C:\Users\Gauxonz\Documents\ENEE440\Project\sources\ProjectMain.c</Name>
-
-        <Folding>1</Folding>
-        <ContractedFolders></ContractedFolders>
-      </Doc>
-    </MDIGroup>
 </ProjectGui>
