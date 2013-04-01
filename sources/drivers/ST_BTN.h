@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------------------
- * Name:    LED.h
- * Purpose: low level LED definitions
+ * Name:    ST_BTN.h
+ * Purpose: low level on-board botton definitions
  * Note(s):
  *----------------------------------------------------------------------------
  * This file is part of the uVision/ARM development tools.
@@ -13,15 +13,10 @@
  * Copyright (c) 2011 Keil - An ARM Company. All rights reserved.
  *----------------------------------------------------------------------------*/
 
-#ifndef __LED_H
-#define __LED_H
+#ifndef __ST_BTN_H
+#define __ST_BTN_H
 
-/* LED Definitions */
-#define LED_NUM     4                        /* Number of user LEDs          */
-extern void LED_Init(void);
-extern void ST_LED_init(void);	//In LED.asm, done by asm.
-extern void LED_On  (unsigned int num);
-extern void LED_Off (unsigned int num);
-extern void LED_Out (unsigned int value);
 
+extern void ST_BTN_init(void);	//initialize onboard LEDs of ST32F4DISCOVERY board
+extern uint32_t ST_BTN_Get(void);	//read onboard button of ST32F4DISCOVERY board
 #endif

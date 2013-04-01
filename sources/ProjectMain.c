@@ -21,12 +21,14 @@
 	int Cint;
 	
 //!!added stuff to get it to compile
-	#include <stdint.h>	//various versions of this in yagarto -- gives unint32_t and other definitions
-	#include ".\basic\system_stm32f4xx.h"
-	#include ".\basic\stm32f4xx.h"
-	#include ".\basic\core_cm4.h"
-//!!things we left in to squelch compiler complaints
- #include ".\drivers\LED.h"
+#include <stdint.h>	//various versions of this in yagarto -- gives unint32_t and other definitions
+#include ".\basic\system_stm32f4xx.h"
+#include ".\basic\stm32f4xx.h"
+#include ".\basic\core_cm4.h"
+#include ".\drivers\ST_LED.h"
+#include ".\drivers\ST_BTN.h"
+#include ".\drivers\ST_P24_SWITCH.h"
+ 
 
 
 
@@ -86,10 +88,14 @@ uint32_t BTN_Get(void) {
 //void testmacro(void);		//in STM32F4_P24v04IO_01.asm
 //void asmLED_init(void);	//""
 //void asmBTN_init(void);	//""
+
 //void ST_LED_init(void); 	//initialize onboard LEDs of ST32F4DISCOVERY board
 //Done in asm ^
 //void ST_BTN_init(void);  	//initialize onboard switches of ST32F4DISCOVERY board
+//Done in asm ^
 //uint32_t ST_BTN_Get(void);	//read onboard button of ST32F4DISCOVERY board
+//Done in asm ^
+
 //void ST_P24DISPLAY_init(void);	//initialize ST32F4 pins controlling P24 display pins
 //void wrCATHODE_0(void);
 //void enabDIGIT_1(void);
@@ -97,8 +103,11 @@ uint32_t BTN_Get(void) {
 //void DISPLAY_off(void);
 //void printHEX(unsigned int);
 //void displayEnab(unsigned int);
+
 //void ST_P24SWITCH_init(void); //initialize ST32F4 pins controlling switches
+//Done in asm ^
 //int getSWITCH(int num);		 //return sampled value of switch
+//Done in asm ^
 
 unsigned int digitvals[4]= {1,2,3,4};			//global variable to hold the four digits being displayed 
 /*
@@ -135,8 +144,8 @@ int main (void) {
 //BTN_Init();
 
 	ST_LED_init(); 								//initialize onboard LEDs of ST32F4DISCOVERY board
-//  ST_BTN_init();								//initialize onboard switches of ST32F4DISCOVERY board
-//  ST_P24SWITCH_init(); 							//initialize ST32F4 pins controlling switches
+	ST_BTN_init();								//initialize onboard switches of ST32F4DISCOVERY board
+	ST_P24SWITCH_init(); 							//initialize ST32F4 pins controlling switches
  
 //  ST_P24DISPLAY_init();							//initialize ST32F4 output pins controlling P24 display pins
 //  wrCATHODE_0();								//put pattern to display '0' on P24 cathode latch
@@ -148,7 +157,7 @@ int main (void) {
   while(1) {                                    // Loop forever               
 /*
 	for(i=1;i<=12;i++) {
-		if(getSWITCH(i)==0) { //switch i is pressed
+		if(ST_P24_GetSwitch(i)==0) { //switch i is pressed
 			digitvals[0]=digitvals[1]=digitvals[2]=digitvals[3]=i;	//display 'i'
 			break;													//and quit search
 		}
@@ -163,9 +172,9 @@ int main (void) {
 		display_update();
 */	
 	
-//		btns = ST_BTN_Get();                      // Read button states         
-//		btns = ST_BTN_Get();                      // Read button states 
-//		if (btns != (1UL << 0)) { // Calculate 'num': 0,1,...,LED_NUM-1,LED_NUM-1,...,1,0,0,...  
+     
+		btns = ST_BTN_Get();                      // Read button states 
+		if (btns != (1UL << 0)) { // Calculate 'num': 0,1,...,LED_NUM-1,LED_NUM-1,...,1,0,0,...  
 
 			num += dir;
 			if (num == LED_NUM) { dir = -1; num =  LED_NUM-1; } 
@@ -176,11 +185,11 @@ int main (void) {
 			LED_Off(num);
 			Delay(200); 
 			// Delay 200ms            
-//		}
-//		else {
-//			LED_Out (0x0F);
-//			Delay(10);                                // Delay 10ms               
-//		}
+		}
+		else {
+			LED_Out (0x0F);
+			Delay(10);                                // Delay 10ms               
+		}
   }
 }
 
