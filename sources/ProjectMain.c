@@ -58,6 +58,7 @@ void Delay (uint32_t dlyTicks) {
   Function that initializes Button pins
  *----------------------------------------------------------------------------*/
 /* replaced with assembly  'ST_BTN_Init()' in "STM32F4_P24v04IO_02.asm"
+
 void BTN_Init(void) {
 
   RCC->AHB1ENR  |= ((1UL <<  0) );              // Enable GPIOA clock         
@@ -67,38 +68,39 @@ void BTN_Init(void) {
   GPIOA->OSPEEDR  |=  ((2UL << 2*0)  ); 
   GPIOA->PUPDR    &= ~((3UL << 2*0)  );         // PA.0 is no Pull up         
 }
-
+/*
 */
 
 /*----------------------------------------------------------------------------
   Function that read Button pins
  *----------------------------------------------------------------------------*/
 /* replaced with assembly  'ST_BTN_Get()' in "STM32F4_P24v04IO_02.asm"
+
 uint32_t BTN_Get(void) {
 
  return (GPIOA->IDR & (1UL << 0));
 }
-*/
+/**/
 
 /**************** tests **********************/
 //void testmacro(void);		//in STM32F4_P24v04IO_01.asm
 //void asmLED_init(void);	//""
 //void asmBTN_init(void);	//""
-void ST_LED_init(void); 	//initialize onboard LEDs of ST32F4DISCOVERY board
-void ST_BTN_init(void);  	//initialize onboard switches of ST32F4DISCOVERY board
-uint32_t ST_BTN_Get(void);	//read onboard button of ST32F4DISCOVERY board
-void ST_P24DISPLAY_init(void);	//initialize ST32F4 pins controlling P24 display pins
-void wrCATHODE_0(void);
-void enabDIGIT_1(void);
-void DISPLAY_on(void);
-void DISPLAY_off(void);
-void printHEX(unsigned int);
-void displayEnab(unsigned int);
-void ST_P24SWITCH_init(void); //initialize ST32F4 pins controlling switches
-int getSWITCH(int num);		 //return sampled value of switch
+//void ST_LED_init(void); 	//initialize onboard LEDs of ST32F4DISCOVERY board
+//void ST_BTN_init(void);  	//initialize onboard switches of ST32F4DISCOVERY board
+//uint32_t ST_BTN_Get(void);	//read onboard button of ST32F4DISCOVERY board
+//void ST_P24DISPLAY_init(void);	//initialize ST32F4 pins controlling P24 display pins
+//void wrCATHODE_0(void);
+//void enabDIGIT_1(void);
+//void DISPLAY_on(void);
+//void DISPLAY_off(void);
+//void printHEX(unsigned int);
+//void displayEnab(unsigned int);
+//void ST_P24SWITCH_init(void); //initialize ST32F4 pins controlling switches
+//int getSWITCH(int num);		 //return sampled value of switch
 
 unsigned int digitvals[4]= {1,2,3,4};			//global variable to hold the four digits being displayed 
-
+/*
 void display_update(void)
 {
 static unsigned int refreshcount=0;					//number of display refresh events
@@ -108,7 +110,7 @@ static unsigned int refreshcount=0;					//number of display refresh events
 	DISPLAY_on();									//lights back on
 	refreshcount++;									// for next time
 }
-	
+*/	
 	
 /*----------------------------------------------------------------------------
   MAIN function
@@ -128,20 +130,22 @@ int main (void) {
   if (SysTick_Config(SystemCoreClock / 1000)) { /* SysTick 1 msec interrupts  */
     while (1);                                  /* Capture error              */
   }
-
-  ST_LED_init(); 								//initialize onboard LEDs of ST32F4DISCOVERY board
-//  ST_BTN_init();								//initialize onboard switches of ST32F4DISCOVERY board
-  ST_P24SWITCH_init(); 							//initialize ST32F4 pins controlling switches
  
-  ST_P24DISPLAY_init();							//initialize ST32F4 output pins controlling P24 display pins
+//BTN_Init();
+
+	ST_LED_init(); 								//initialize onboard LEDs of ST32F4DISCOVERY board
+//  ST_BTN_init();								//initialize onboard switches of ST32F4DISCOVERY board
+//  ST_P24SWITCH_init(); 							//initialize ST32F4 pins controlling switches
+ 
+//  ST_P24DISPLAY_init();							//initialize ST32F4 output pins controlling P24 display pins
 //  wrCATHODE_0();								//put pattern to display '0' on P24 cathode latch
-  printHEX(1);
+//  printHEX(1);
 //  enabDIGIT_1();								//put pattern to enable digit 1 on P24 anode latch
-  displayEnab(3);
-  DISPLAY_on();									//enable output drive of P24 anode, cathode latches
+//  displayEnab(3);
+//  DISPLAY_on();									//enable output drive of P24 anode, cathode latches
  
   while(1) {                                    // Loop forever               
-
+/*
 	for(i=1;i<=12;i++) {
 		if(getSWITCH(i)==0) { //switch i is pressed
 			digitvals[0]=digitvals[1]=digitvals[2]=digitvals[3]=i;	//display 'i'
@@ -156,11 +160,12 @@ int main (void) {
 
 
 		display_update();
-	
+*/	
 	
 //		btns = ST_BTN_Get();                      // Read button states         
-
+//		btns = ST_BTN_Get();                      // Read button states 
 //		if (btns != (1UL << 0)) { // Calculate 'num': 0,1,...,LED_NUM-1,LED_NUM-1,...,1,0,0,...  
+/*
 			num += dir;
 			if (num == LED_NUM) { dir = -1; num =  LED_NUM-1; } 
 			else if   (num < 0) { dir =  1; num =  0;         }
@@ -168,7 +173,8 @@ int main (void) {
 			LED_On (num);
 			Delay( 50);                               // Delay 50ms                 
 			LED_Off(num);
-			Delay(200);                               // Delay 200ms            
+			Delay(200); 
+*/			// Delay 200ms            
 //		}
 //		else {
 //			LED_Out (0x0F);
