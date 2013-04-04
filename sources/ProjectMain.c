@@ -30,8 +30,7 @@
 #include ".\drivers\ST_LED.h"
 #include ".\drivers\ST_BTN.h"
 #include ".\drivers\ST_P24_SWITCH.h"
-#include ".\drivers\ST_P24_SEG.h"
-
+#include ".\drivers\ST_P24_DISPLAY.h"
 
 
 extern uint32_t SystemCoreClock;
@@ -112,6 +111,7 @@ uint32_t BTN_Get(void) {
 //Done in asm ^
 
 unsigned int digitvals[4]= {1,2,3,4};			//global variable to hold the four digits being displayed 
+char DispContants[10] = {0,0,0,0,0,0,0,0,0,0};
 /*
 void display_update(void)
 {
@@ -149,10 +149,12 @@ int main (void) {
 //	ST_BTN_init();								//initialize onboard switches of ST32F4DISCOVERY board
 //	ST_P24SWITCH_init(); 							//initialize ST32F4 pins controlling switches
  
-  ST_P24DISPLAY_init();							//initialize ST32F4 output pins controlling P24 display pins
+  ST_P24_DisplayIni();							//initialize ST32F4 output pins controlling P24 display pins
   //wrCATHODE_0();								//put pattern to display '0' on P24 cathode latch
   
   //printHEX(0);
+  ST_P24_Display_SetChar(':');
+  /*
   Set_PortC_Bit(2,0);
   Set_PortA_Bit(0,0);
   Set_PortC_Bit(3,0);
@@ -164,9 +166,11 @@ int main (void) {
   
   Set_PortC_Bit(5,0);
   Set_PortC_Bit(5,1);
-  
+  /**/
   //enabDIGIT_1();								//put pattern to enable digit 1 on P24 anode latch
   //displayEnab(3);
+  ST_P24_Display_SlctSeg(5);
+  /*
   Set_PortA_Bit(7,1);
   Set_PortA_Bit(4,1);
   Set_PortA_Bit(5,1);
@@ -179,9 +183,10 @@ int main (void) {
   
   Set_PortC_Bit(4,0);
   Set_PortC_Bit(4,1);
+  */
   
   //DISPLAY_on();									//enable output drive of P24 anode, cathode latches
-  Set_PortA_Bit(5,0);
+  Set_PortA_Bit(6,0);
   Set_PortC_Bit(1,0);
   while(1) {                                    // Loop forever               
 /*

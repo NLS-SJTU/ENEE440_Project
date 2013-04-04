@@ -3,9 +3,9 @@
 .data
 .bss
 .text
-.global ST_P24DISPLAY_init
+.global ST_P24_DisplayIni
 .thumb_func
-ST_P24DISPLAY_init:
+ST_P24_DisplayIni:
 	movw	r2, #14384	@; 0x3830
 	movt	r2, #16386	@; 0x4002
 	ldr	r1, [r2, #0]
@@ -293,178 +293,68 @@ ST_P24DISPLAY_init:
 	orr.w	r1, r1, #1024	@; 0x400
 	str	r1, [r2, #12]
 	bx	lr
+
+	
+.global ST_P24_Display_On
+.thumb_func
+ST_P24_Display_On:
+	push	{r7, lr}
+	add	r7, sp, #0
+
+	mov.w	r0, #6
+	mov.w	r1, #0
+	bl	Set_PortA_Bit
+	
+	mov.w	r0, #1
+	mov.w	r1, #0
+	bl	Set_PortC_Bit
+	pop	{r7, pc}
+	nop
+	
+.global ST_P24_Display_Off
+.thumb_func
+ST_P24_Display_Off:
+	ldr		r2, =0x40020000
+    ldr		r1, =0x00000040
+    str	r1, [r2, #24]				@; a6 1
+    ldr		r2, =0x40020800
+    mov.w	r1, #2
+    str	r1, [r2, #24]				@; c1 1
+    bx	lr
+
+
+
+
+.global ST_P24_DisplayUpdate
+.thumb_func
+ST_P24_DisplayUpdate:
+	bx	lr
 	
 .global wrCATHODE_0
 .thumb_func
 wrCATHODE_0:
-	movw	r2, #2048	@; 0x800
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #262144	@; 0x40000
-	str	r1, [r2, #24]
-	movw	r2, #0
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #65536	@; 0x10000
-	str	r1, [r2, #24]
-	movw	r2, #2048	@; 0x800
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #524288	@; 0x80000
-	str	r1, [r2, #24]
-	movw	r2, #0
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #8388608	@; 0x800000
-	str	r1, [r2, #24]
-	movw	r2, #0
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #1048576	@; 0x100000
-	str	r1, [r2, #24]
-	movw	r2, #2048	@; 0x800
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #65536	@; 0x10000
-	str	r1, [r2, #24]
-	movw	r2, #0
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #2
-	str	r1, [r2, #24]
-	movw	r2, #0
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #32
-	str	r1, [r2, #24]
-	movw	r2, #2048	@; 0x800
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #2097152	@; 0x200000
-	str	r1, [r2, #24]
-	movw	r2, #2048	@; 0x800
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #32
-	str	r1, [r2, #24]
 	bx	lr
 	
 .global printHEX
 .thumb_func
 printHEX:
-	nop
-	and.w	r0, r0, #15
-	mov.w	r0, r0, lsl #2
-	add	r2, pc, #4	@; (adr r2, 800068c <printHEX_dispatch_table>)
-	ldr.w	pc, [r2, r0]
-printHEX_dispatch_table:
-.word	0x080006cd
-.word	0x0800075b
-.word	0x080007e9
-.word	0x08000877
-.word	0x08000905
-.word	0x08000993
-.word	0x08000a21
-.word	0x08000aaf
-.word	0x08000b3d
-.word	0x08000bcb
-.word	0x08000c59
-.word	0x08000ce7
-.word	0x08000d75
-.word	0x08000e03
-.word	0x08000e91
-.word	0x08000f1f
+	bx lr
 
 
 .global enabDIGIT_1
 .thumb_func
 enabDIGIT_1:
-	movw	r2, #0
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #128	@; 0x80
-	str	r1, [r2, #24]
-	movw	r2, #0
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #16
-	str	r1, [r2, #24]
-	movw	r2, #0
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #32
-	str	r1, [r2, #24]
-	movw	r2, #0
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #1
-	str	r1, [r2, #24]
-	movw	r2, #0
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #2
-	str	r1, [r2, #24]
-	movw	r2, #2048	@; 0x800
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #8
-	str	r1, [r2, #24]
-	movw	r2, #2048	@; 0x800
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #1
-	str	r1, [r2, #24]
-	movw	r2, #2048	@; 0x800
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #262144	@; 0x40000
-	str	r1, [r2, #24]
-	movw	r2, #2048	@; 0x800
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #1048576	@; 0x100000
-	str	r1, [r2, #24]
-	movw	r2, #2048	@; 0x800
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #16
-	str	r1, [r2, #24]
+
 	bx	lr
 
 .global displayEnab
 .thumb_func
 displayEnab:
-	movw	r2, #0
- 	movt	r2, #16386	@; 0x4002
- 	mov.w	r1, #128	@; 0x80
- 	str	r1, [r2, #24]
- 	movw	r2, #0
- 	movt	r2, #16386	@; 0x4002
- 	mov.w	r1, #16
- 	str	r1, [r2, #24]
- 	movw	r2, #0
- 	movt	r2, #16386	@; 0x4002
- 	mov.w	r1, #32
- 	str	r1, [r2, #24]
- 	movw	r2, #0
- 	movt	r2, #16386	@; 0x4002
- 	mov.w	r1, #1
- 	str	r1, [r2, #24]
- 	movw	r2, #0
- 	movt	r2, #16386	@; 0x4002
- 	mov.w	r1, #2
- 	str	r1, [r2, #24]
- 	movw	r2, #2048	@; 0x800
- 	movt	r2, #16386	@; 0x4002
- 	mov.w	r1, #8
- 	str	r1, [r2, #24]
- 	movw	r2, #2048	@; 0x800
- 	movt	r2, #16386	@; 0x4002
- 	mov.w	r1, #1
- 	str	r1, [r2, #24]
- 	movw	r2, #2048	@; 0x800
- 	movt	r2, #16386	@; 0x4002
- 	mov.w	r1, #262144	@; 0x40000
- 	str	r1, [r2, #24]
- 	movw	r2, #2048	@; 0x800
- 	movt	r2, #16386	@; 0x4002
- 	mov.w	r1, #1048576	@; 0x100000
- 	str	r1, [r2, #24]
- 	movw	r2, #2048	@; 0x800
- 	movt	r2, #16386	@; 0x4002
- 	mov.w	r1, #16
- 	str	r1, [r2, #24]
+
  	bx	lr
 
 .global DISPLAY_on
 .thumb_func
 DISPLAY_on:
-	movw	r2, #0
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #4194304	@; 0x400000
-	str	r1, [r2, #24]
-	movw	r2, #2048	@; 0x800
-	movt	r2, #16386	@; 0x4002
-	mov.w	r1, #131072	@; 0x20000
-	str	r1, [r2, #24]
 	bx	lr
+	

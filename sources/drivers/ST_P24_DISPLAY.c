@@ -13,15 +13,21 @@
  * Copyright (c) 2011 Keil - An ARM Company. All rights reserved.
  *----------------------------------------------------------------------------*/
 #include "..\basic\GPIO.h"
-#ifndef __ST_SEG_H
-#define __ST_SEG_H
+#include "ST_P24_DISPLAY.h"
+
+void ST_P24_Display_On(void)
+{
+  Set_PortA_Bit(6,0);
+  Set_PortC_Bit(1,0);	
+}
+
+//extern void  ST_P24_Display_Off(void);
+void  ST_P24_Display_Off(void)
+{
+  Set_PortA_Bit(6,1);
+  Set_PortC_Bit(1,1);
+}
+//extern void  ST_P24_Display_SetChar(char);
+//extern void  ST_P24_Display_SlctSeg(unsigned int);
 
 
-extern void ST_P24DISPLAY_init(void);	//initialize ST32F4 pins controlling P24 display pins
-extern void  wrCATHODE_0(void);
-extern void  enabDIGIT_1(void);
-extern void  DISPLAY_on(void);
-extern void  DISPLAY_off(void);
-extern void  printHEX(unsigned int);
-extern void  displayEnab(unsigned int);
-#endif
