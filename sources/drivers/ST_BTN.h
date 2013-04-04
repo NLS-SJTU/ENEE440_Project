@@ -12,7 +12,7 @@
  *
  * Copyright (c) 2011 Keil - An ARM Company. All rights reserved.
  *----------------------------------------------------------------------------*/
-
+#include "..\basic\GPIO.h"
 #ifndef __ST_BTN_H
 #define __ST_BTN_H
 

@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------------------
- * Name:    ST_LED.h
- * Purpose: low level LED definitions
+ * Name:    ST_SEG.h
+ * Purpose: low level on-board botton definitions
  * Note(s):
  *----------------------------------------------------------------------------
  * This file is part of the uVision/ARM development tools.
@@ -13,15 +13,15 @@
  * Copyright (c) 2011 Keil - An ARM Company. All rights reserved.
  *----------------------------------------------------------------------------*/
 #include "..\basic\GPIO.h"
-#ifndef __ST_LED_H
-#define __ST_LED_H
+#ifndef __ST_SEG_H
+#define __ST_SEG_H
 
-/* LED Definitions */
-#define LED_NUM     4                        /* Number of user LEDs          */
-extern void LED_Init(void);
-extern void ST_LED_init(void);	//In LED.asm, done by asm.
-extern void LED_On  (unsigned int num);
-extern void LED_Off (unsigned int num);
-extern void LED_Out (unsigned int value);
 
+extern void ST_P24DISPLAY_init(void);	//initialize ST32F4 pins controlling P24 display pins
+extern void  wrCATHODE_0(void);
+extern void  enabDIGIT_1(void);
+extern void  DISPLAY_on(void);
+extern void  DISPLAY_off(void);
+extern void  printHEX(unsigned int);
+extern void  displayEnab(unsigned int);
 #endif

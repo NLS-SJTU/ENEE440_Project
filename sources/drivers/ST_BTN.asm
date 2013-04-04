@@ -38,3 +38,4 @@ ST_BTN_Get:
  	ands.w	r0, r0, #1
  	mov.w	r0, r0
  	bx	lr
+	

@@ -392,9 +392,9 @@
           <GroupName>Source Group 1</GroupName>
           <Files>
             <File>
-              <FileName>ProjectMain.c</FileName>
+              <FileName>STM32F4main04.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\sources\ProjectMain.c</FilePath>
+              <FilePath>.\STM32F4main04.c</FilePath>
             </File>
           </Files>
         </Group>

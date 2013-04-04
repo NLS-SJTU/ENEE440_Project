@@ -25,10 +25,12 @@
 #include ".\basic\system_stm32f4xx.h"
 #include ".\basic\stm32f4xx.h"
 #include ".\basic\core_cm4.h"
+#include ".\basic\GPIO.h"
+
 #include ".\drivers\ST_LED.h"
 #include ".\drivers\ST_BTN.h"
 #include ".\drivers\ST_P24_SWITCH.h"
- 
+#include ".\drivers\ST_P24_SEG.h"
 
 
 
@@ -143,17 +145,44 @@ int main (void) {
  
 //BTN_Init();
 
-	ST_LED_init(); 								//initialize onboard LEDs of ST32F4DISCOVERY board
-	ST_BTN_init();								//initialize onboard switches of ST32F4DISCOVERY board
-	ST_P24SWITCH_init(); 							//initialize ST32F4 pins controlling switches
+//	ST_LED_init(); 								//initialize onboard LEDs of ST32F4DISCOVERY board
+//	ST_BTN_init();								//initialize onboard switches of ST32F4DISCOVERY board
+//	ST_P24SWITCH_init(); 							//initialize ST32F4 pins controlling switches
  
-//  ST_P24DISPLAY_init();							//initialize ST32F4 output pins controlling P24 display pins
-//  wrCATHODE_0();								//put pattern to display '0' on P24 cathode latch
-//  printHEX(1);
-//  enabDIGIT_1();								//put pattern to enable digit 1 on P24 anode latch
-//  displayEnab(3);
-//  DISPLAY_on();									//enable output drive of P24 anode, cathode latches
- 
+  ST_P24DISPLAY_init();							//initialize ST32F4 output pins controlling P24 display pins
+  //wrCATHODE_0();								//put pattern to display '0' on P24 cathode latch
+  
+  //printHEX(0);
+  Set_PortC_Bit(2,0);
+  Set_PortA_Bit(0,0);
+  Set_PortC_Bit(3,0);
+  Set_PortA_Bit(7,0);
+  Set_PortA_Bit(4,0);
+  Set_PortC_Bit(0,0);
+  Set_PortA_Bit(1,1);
+  Set_PortA_Bit(5,1);
+  
+  Set_PortC_Bit(5,0);
+  Set_PortC_Bit(5,1);
+  
+  //enabDIGIT_1();								//put pattern to enable digit 1 on P24 anode latch
+  //displayEnab(3);
+  Set_PortA_Bit(7,1);
+  Set_PortA_Bit(4,1);
+  Set_PortA_Bit(5,1);
+  
+  Set_PortA_Bit(0,1);
+  Set_PortA_Bit(1,1);
+  Set_PortC_Bit(3,1);
+  Set_PortC_Bit(0,0);
+  Set_PortC_Bit(2,1);
+  
+  Set_PortC_Bit(4,0);
+  Set_PortC_Bit(4,1);
+  
+  //DISPLAY_on();									//enable output drive of P24 anode, cathode latches
+  Set_PortA_Bit(5,0);
+  Set_PortC_Bit(1,0);
   while(1) {                                    // Loop forever               
 /*
 	for(i=1;i<=12;i++) {
@@ -170,9 +199,18 @@ int main (void) {
 
 
 		display_update();
+*/
+/*	
+	Set_PortC_MODER(0,1)
+	Set_PortC_MODER(1,0)
+	Set_PortC_MODER(4,1)
+	Set_PortC_MODER(5,0)
 */	
-	
+
+//	DWrite_PortC(2,0);
      
+/**/
+/*
 		btns = ST_BTN_Get();                      // Read button states 
 		if (btns != (1UL << 0)) { // Calculate 'num': 0,1,...,LED_NUM-1,LED_NUM-1,...,1,0,0,...  
 
@@ -190,6 +228,7 @@ int main (void) {
 			LED_Out (0x0F);
 			Delay(10);                                // Delay 10ms               
 		}
+/**/
   }
 }
 

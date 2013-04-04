@@ -11,9 +11,12 @@ REM compiling basic in c
 arm-none-eabi-gcc -I./  -c -mthumb -O0 -g -mcpu=cortex-m4 -save-temps .\sources\basic\system_stm32f4xx.c -o system_stm32f4xx.o
 
 REM compiling drivers in asm
+arm-none-eabi-as -g -mcpu=cortex-m4 .\sources\basic\GPIO.asm -o aGPIO.o
+
 arm-none-eabi-as -g -mcpu=cortex-m4 .\sources\drivers\ST_LED.asm -o aST_LED.o
 arm-none-eabi-as -g -mcpu=cortex-m4 .\sources\drivers\ST_BTN.asm -o aST_BTN.o
 arm-none-eabi-as -g -mcpu=cortex-m4 .\sources\drivers\ST_P24_SWITCH.asm -o aST_P24_SWITCH.o
+arm-none-eabi-as -g -mcpu=cortex-m4 .\sources\drivers\ST_P24_SEG.asm -o aST_P24_SEG.o
 
 REM compiling drivers in c
 arm-none-eabi-gcc -I./  -c -mthumb -O0 -g -mcpu=cortex-m4 -save-temps .\sources\drivers\ST_LED.c -o cST_LED.o
@@ -25,7 +28,8 @@ REM linking
 arm-none-eabi-gcc -nostartfiles -g -Wl,--no-gc-sections -Wl,-Map,.\objs\Blinky.map -Wl,-T ^
 .\linkers\linkBlinkySTM32F4_01.ld ^
 -o Blinky.elf ^
-aStartup.o system_stm32f4xx.o aST_LED.o cST_LED.o aST_BTN.o aST_P24_SWITCH.o cMain.o ^
+aStartup.o system_stm32f4xx.o aST_LED.o cST_LED.o aST_BTN.o ^
+aST_P24_SWITCH.o aST_P24_SEG.o aGPIO.o cMain.o ^
 -lgcc
 
 REM hex file
