@@ -339,7 +339,7 @@ ST_P24_Display_SlctSeg_BranchTable:
 	b ST_P24_Display_SlctSeg_2	@; 02
 	b ST_P24_Display_SlctSeg_3	@; 03
 	b ST_P24_Display_SlctSeg_4	@; 04
-
+	b ST_P24_Display_SlctSeg_5	@; 04
 	
 ST_P24_Display_SlctSeg_0:
 	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5		@;Set_PortA_Bit(7,1);

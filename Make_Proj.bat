@@ -30,19 +30,21 @@ arm-none-eabi-as -g -mcpu=cortex-m4 -I .\sources\basic ^
 .\sources\drivers\ST_P24_SWITCH.asm -o aST_P24_SWITCH.o
 arm-none-eabi-as -g -mcpu=cortex-m4 -I .\sources\basic ^
 .\sources\drivers\ST_P24_DISPLAY.asm -o aST_P24_DISPLAY.o
+arm-none-eabi-as -g -mcpu=cortex-m4 -I .\sources\basic ^
+.\sources\drivers\ST_P24_LED.asm -o aST_P24_LED.o
 
 REM compiling drivers in c
 arm-none-eabi-gcc -I./  -c -mthumb -O0 -g -mcpu=cortex-m4 -save-temps .\sources\drivers\ST_LED.c -o cST_LED.o
 
 REM compiling main C
-arm-none-eabi-gcc -I./  -c -mthumb -O0 -g -mcpu=cortex-m4 -save-temps .\sources\ProjectMain.c -o cMain.o
+arm-none-eabi-gcc -I./ -std=c99 -c -mthumb -O0 -g -mcpu=cortex-m4 -save-temps .\sources\ProjectMain.c -o cMain.o
 
 REM linking
 arm-none-eabi-gcc -nostartfiles -g -Wl,--no-gc-sections -Wl,-Map,.\objs\Blinky.map -Wl,-T ^
 .\linkers\linkBlinkySTM32F4_01.ld ^
 -o Blinky.elf ^
 aStartup.o system_stm32f4xx.o aST_LED.o cST_LED.o aST_BTN.o ^
-aST_P24_SWITCH.o aST_P24_DISPLAY.o aGPIO.o cMain.o ^
+aST_P24_SWITCH.o aST_P24_DISPLAY.o aGPIO.o aST_P24_LED.o cMain.o ^
 -lgcc
 
 REM hex file

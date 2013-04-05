@@ -18,7 +18,7 @@
  *----------------------------------------------------------------------------*/
 
 //global variables used in CortexM4asmOps_01.asm but defined here
-	int Cint;
+
 	
 //!!added stuff to get it to compile
 #include <stdint.h>	//various versions of this in yagarto -- gives unint32_t and other definitions
@@ -31,16 +31,20 @@
 #include ".\drivers\ST_BTN.h"
 #include ".\drivers\ST_P24_SWITCH.h"
 #include ".\drivers\ST_P24_DISPLAY.h"
+#include ".\drivers\ST_P24_LED.h"
 
 
 extern uint32_t SystemCoreClock;
-volatile uint32_t msTicks;                      /* counts 1ms timeTicks       */
+volatile uint32_t msTicks;                    //counts 1ms timeTicks 
+unsigned int* DispContants;
+unsigned int freq_arr[4]={0,1,2,5};
 /*----------------------------------------------------------------------------
   SysTick_Handler
  *----------------------------------------------------------------------------*/
 void SysTick_Handler(void) {
   msTicks++;
-}
+  //if(msTicks==20){ST_P24_DisplayUpdate(DispContants);msTicks=0;}
+  }
 
 /*----------------------------------------------------------------------------
   delays number of tick Systicks (happens every 1 ms)
@@ -57,129 +61,124 @@ void Delay (uint32_t dlyTicks) {
 }
 
 
-/*----------------------------------------------------------------------------
-  Function that initializes Button pins
- *----------------------------------------------------------------------------*/
-/* replaced with assembly  'ST_BTN_Init()' in "STM32F4_P24v04IO_02.asm"
-
-void BTN_Init(void) {
-
-  RCC->AHB1ENR  |= ((1UL <<  0) );              // Enable GPIOA clock         
-
-  GPIOA->MODER    &= ~((3UL << 2*0)  );         // PA.0 is input              
-  GPIOA->OSPEEDR  &= ~((3UL << 2*0)  );         // PA.0 is 50MHz Fast Speed   
-  GPIOA->OSPEEDR  |=  ((2UL << 2*0)  ); 
-  GPIOA->PUPDR    &= ~((3UL << 2*0)  );         // PA.0 is no Pull up         
-}
-/*
-*/
-
-/*----------------------------------------------------------------------------
-  Function that read Button pins
- *----------------------------------------------------------------------------*/
-/* replaced with assembly  'ST_BTN_Get()' in "STM32F4_P24v04IO_02.asm"
-
-uint32_t BTN_Get(void) {
-
- return (GPIOA->IDR & (1UL << 0));
-}
-/**/
-
-/**************** tests **********************/
-//void testmacro(void);		//in STM32F4_P24v04IO_01.asm
-//void asmLED_init(void);	//""
-//void asmBTN_init(void);	//""
-
-//void ST_LED_init(void); 	//initialize onboard LEDs of ST32F4DISCOVERY board
-//Done in asm ^
-//void ST_BTN_init(void);  	//initialize onboard switches of ST32F4DISCOVERY board
-//Done in asm ^
-//uint32_t ST_BTN_Get(void);	//read onboard button of ST32F4DISCOVERY board
-//Done in asm ^
-
-//void ST_P24DISPLAY_init(void);	//initialize ST32F4 pins controlling P24 display pins
-//void wrCATHODE_0(void);
-//void enabDIGIT_1(void);
-//void DISPLAY_on(void);
-//void DISPLAY_off(void);
-//void printHEX(unsigned int);
-//void displayEnab(unsigned int);
-
-//void ST_P24SWITCH_init(void); //initialize ST32F4 pins controlling switches
-//Done in asm ^
-//int getSWITCH(int num);		 //return sampled value of switch
-//Done in asm ^
-
-//unsigned int digitvals[4]= {1,2,3,4};			//global variable to hold the four digits being displayed 
-unsigned int DispContants[4] = {1,2,3,4};
-/*
-void display_update(void)
+void Conver_Int2Array(int in, unsigned int* arr)
 {
-static unsigned int refreshcount=0;					//number of display refresh events
-	DISPLAY_off();									//hide changover
-	printHEX( digitvals[refreshcount & 0x03]);		//print contents of digitvals[]
-	displayEnab((refreshcount & 0x03)+1);			//in digits positions 1-2-3-4
-	DISPLAY_on();									//lights back on
-	refreshcount++;									// for next time
+	for(int i=3;i>=0;i--)
+	{
+	arr[i] = in%10;
+	in/=10;
+	}
 }
-*/	
-	
 /*----------------------------------------------------------------------------
   MAIN function
  *----------------------------------------------------------------------------*/
 int main (void) {
-  int32_t num = -1; 
-  int32_t dir =  1;
+ int32_t num = -1; 
+ int32_t dir =  1;
  uint32_t btns = 0;
+ unsigned int freq = 125;
+
+ //unsigned int* freq_arr;
+
  int i;
- 
   SystemCoreClock = 168000000; 	//!!found in system_stm32f4xx.c, added here instead of as global
 							   //because we're trying to avoid need to have crt0.o
-
- 
- 
   SystemCoreClockUpdate();                      /* Get Core Clock Frequency   */
-  if (SysTick_Config(SystemCoreClock / 1000)) { /* SysTick 1 msec interrupts  */
+  if (SysTick_Config(SystemCoreClock / 1000)) 
+  { /* SysTick 1 msec interrupts  */
     while (1);                                  /* Capture error              */
   }
  
-//BTN_Init();
 
-//	ST_LED_init(); 								//initialize onboard LEDs of ST32F4DISCOVERY board
-//	ST_BTN_init();								//initialize onboard switches of ST32F4DISCOVERY board
+
+	//ST_LED_init(); 								//initialize onboard LEDs of ST32F4DISCOVERY board
+	//ST_BTN_init();								//initialize onboard switches of ST32F4DISCOVERY board
 	ST_P24SWITCH_init(); 							//initialize ST32F4 pins controlling switches
- 
-  ST_P24_DisplayIni();							//initialize ST32F4 output pins controlling P24 display pins
-  //wrCATHODE_0();								//put pattern to display '0' on P24 cathode latch
-  
-  //printHEX(0);
-  ST_P24_Display_SetChar(1);
-  ST_P24_Display_SlctSeg(10);
-
-  ST_P24_Display_On();									//enable output drive of P24 anode, cathode latches
+	ST_P24_DisplayIni();							//initialize ST32F4 output pins controlling P24 display pins
+	ST_P24_Display_SetChar(31);
+	ST_P24_Display_SlctSeg(5);
+										//enable output drive of P24 anode, cathode latches
+	DispContants[0]=DispContants[1]=DispContants[2]=DispContants[3]=31;
+	ST_P24_Display_On();	
 
   while(1) {                                    // Loop forever               
-
+	
+	Conver_Int2Array(freq,freq_arr);
 	for(i=1;i<=12;i++) {
-		if(ST_P24_GetSwitch(i)==0) { //switch i is pressed
-			DispContants[0]=DispContants[1]=DispContants[2]=DispContants[3]=i;	//display 'i'
-			break;													//and quit search
+		if(ST_P24_GetSwitch(i)==0) 
+		{ //switch i is pressed
+			Delay(5);
+			if(ST_P24_GetSwitch(i)==0) 
+			{
+			switch(i)
+			{
+				case 1:
+					(freq_arr[0]<9)?(freq+=1000):(freq-=9000);
+				break;
+				case 2:
+					(freq_arr[0]<1)?(freq+=9000):(freq-=1000);
+				break;
+				case 3:
+					(freq_arr[1]<9)?(freq+=100):(freq-=900);
+				break;
+				case 4:
+					(freq_arr[1]<1)?(freq+=900):(freq-=100);
+				break;
+				case 5:
+					(freq_arr[2]<9)?(freq+=10):(freq-=90);
+				break;
+				case 6:
+					(freq_arr[2]<1)?(freq+=90):(freq-=10);
+				break;
+				case 7:
+					(freq_arr[3]<9)?(freq+=1):(freq-=9);
+				break;
+				case 8:
+					(freq_arr[3]<1)?(freq+=9):(freq-=1);
+				break;
+				case 9:
+					freq=125;
+					Conver_Int2Array(freq,freq_arr);
+					DispContants=freq_arr;
+					
+
+				break;
+				case 10:
+				break;
+				case 11:
+				break;
+				case 12:
+				break;
+				default:	
+				freq=125;
+				break;
+			}
+			}
+			
 		}
-		else {
-			DispContants[0]=DispContants[1]=DispContants[2]=DispContants[3]=31;
-		}
+
 	}
-
-
-
-ST_P24_DisplayUpdate(DispContants);
+	//Conver_Int2Array(freq,DispContants);
+	ST_P24_DisplayUpdate(DispContants);
+//ST_P24_LED_On_G(1);
+//					Set_PortC_Bit(3,1);
+	//				Set_PortC_Bit(5,0);
+		//			Set_PortC_Bit(5,1);
 /*	
 	Set_PortC_MODER(0,1)
 	Set_PortC_MODER(1,0)
 	Set_PortC_MODER(4,1)
 	Set_PortC_MODER(5,0)
 */	
-
+					//ST_P24_Display_Off();	
+					//ST_P24_DisplayIni();
+					
+					//Set_PortC_Bit(3,0);
+					//Set_PortC_Bit(5,0);
+					//Set_PortC_Bit(5,1);
+					
+					
+					//ST_P24_Display_On();	
 //	DWrite_PortC(2,0);
      
 /**/
