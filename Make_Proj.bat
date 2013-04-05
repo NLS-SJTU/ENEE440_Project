@@ -4,6 +4,17 @@ REM !!source for display and switch drivers of aIOtest.obj (STM32F4_P24v04IO_04.
 REM fix path as necessary
 set path=.\;C:\yagarto\bin;
 
+REM deleting
+del /s *.o
+del /s *.elf
+del /s *.hex
+del /s *.AXF
+del /s *.dep
+del /s *.map
+del /s *.i
+del /s *.s
+del /s *.lst
+
 REM compiling basic in asm
 REM assemble with '-g' omitted where we want to hide things in the AXF
 arm-none-eabi-as -g -mcpu=cortex-m4 -o aStartup.o .\sources\basic\SimpleStartSTM32F4_01.asm
@@ -11,12 +22,13 @@ REM compiling basic in c
 arm-none-eabi-gcc -I./  -c -mthumb -O0 -g -mcpu=cortex-m4 -save-temps .\sources\basic\system_stm32f4xx.c -o system_stm32f4xx.o
 
 REM compiling drivers in asm
-arm-none-eabi-as -g -mcpu=cortex-m4 .\sources\basic\GPIO.asm -o aGPIO.o
+arm-none-eabi-as -g -mcpu=cortex-m4 -I .\sources\basic .\sources\basic\GPIO.asm -o aGPIO.o
 
 arm-none-eabi-as -g -mcpu=cortex-m4 .\sources\drivers\ST_LED.asm -o aST_LED.o
 arm-none-eabi-as -g -mcpu=cortex-m4 .\sources\drivers\ST_BTN.asm -o aST_BTN.o
 arm-none-eabi-as -g -mcpu=cortex-m4 .\sources\drivers\ST_P24_SWITCH.asm -o aST_P24_SWITCH.o
-arm-none-eabi-as -g -mcpu=cortex-m4 .\sources\drivers\ST_P24_DISPLAY.asm -o aST_P24_DISPLAY.o
+arm-none-eabi-as -g -mcpu=cortex-m4 -I .\sources\basic ^
+.\sources\drivers\ST_P24_DISPLAY.asm -o aST_P24_DISPLAY.o
 
 REM compiling drivers in c
 arm-none-eabi-gcc -I./  -c -mthumb -O0 -g -mcpu=cortex-m4 -save-temps .\sources\drivers\ST_LED.c -o cST_LED.o

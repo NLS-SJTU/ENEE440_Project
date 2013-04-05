@@ -1,8 +1,436 @@
+.include "../basic/stm32f4xx_RegDef.h"
 .syntax unified	@;to allow thumb-2 instruction set
 .thumb						@; Use thmb instructions only
 .data
 .bss
+.macro DirectWrite_Data PortFooAddr data_r temp_r1 temp_r2 @; data in reg1
+	ldr \temp_r1, =\PortFooAddr
+	ldr \temp_r2, =\data_r
+	str \temp_r2,[\temp_r1]
+.endm
+
 .text
+
+.global ST_P24_Display_On
+.thumb_func
+ST_P24_Display_On:
+	DirectWrite_Data MY_GPIOA_BSRR 0x00400000 r4 r5	@; a6=0
+	DirectWrite_Data MY_GPIOC_BSRR 0x00020000 r4 r5 @; c1=0
+	bx lr
+	
+.global ST_P24_Display_Off
+.thumb_func
+ST_P24_Display_Off:
+	DirectWrite_Data MY_GPIOA_BSRR 0x0040 r4 r5	@; a6=1
+	DirectWrite_Data MY_GPIOC_BSRR 0x0002 r4 r5 @; c1=1
+	bx lr
+
+.global ST_P24_Display_SetChar
+.thumb_func
+ST_P24_Display_SetChar:
+	and r0,r0,#0x1f
+	mov r0, r0, lsl #1
+	@;adr r2,ST_P24_Display_SetChar_BranchTable
+	add pc,pc,r0
+	nop
+ST_P24_Display_SetChar_BranchTable:
+	b ST_P24_Display_SetChar_0	@; 00
+	b ST_P24_Display_SetChar_1	@; 01
+	b ST_P24_Display_SetChar_2	@; 02
+	b ST_P24_Display_SetChar_3	@; 03
+	b ST_P24_Display_SetChar_4	@; 04
+	b ST_P24_Display_SetChar_5	@; 05
+	b ST_P24_Display_SetChar_6	@; 06
+	b ST_P24_Display_SetChar_7	@; 07
+	b ST_P24_Display_SetChar_8	@; 08
+	b ST_P24_Display_SetChar_9	@; 09
+	b ST_P24_Display_SetChar_a	@; 10
+	b ST_P24_Display_SetChar_b	@; 11
+	b ST_P24_Display_SetChar_c	@; 12
+	b ST_P24_Display_SetChar_d	@; 13
+	b ST_P24_Display_SetChar_e	@; 14
+	b ST_P24_Display_SetChar_f	@; 15
+	b ST_P24_Display_SetChar_dot	@; 16
+	b ST_P24_Display_SetChar_colon	@; 17
+	b ST_P24_Display_SetChar_qt		@; 18
+	b ST_P24_Display_SetChar_NULL	@; 19
+	b ST_P24_Display_SetChar_NULL	@; 19
+	b ST_P24_Display_SetChar_NULL	@; 19
+	b ST_P24_Display_SetChar_NULL	@; 19
+	b ST_P24_Display_SetChar_NULL	@; 19
+	b ST_P24_Display_SetChar_NULL	@; 19
+	b ST_P24_Display_SetChar_NULL	@; 19
+	b ST_P24_Display_SetChar_NULL	@; 19
+	b ST_P24_Display_SetChar_NULL	@; 19
+	b ST_P24_Display_SetChar_NULL	@; 19
+	b ST_P24_Display_SetChar_NULL	@; 19
+	b ST_P24_Display_SetChar_NULL	@; 19
+	b ST_P24_Display_SetChar_NULL	@; 19
+	b ST_P24_Display_SetChar_NULL	@; 19
+	b ST_P24_Display_SetChar_NULL	@; 19
+	
+ST_P24_Display_SetChar_0:
+	DirectWrite_Data MY_GPIOC_BSRR 0x00040000 r4 r5	@;Set_PortC_Bit(2,0);
+	DirectWrite_Data MY_GPIOA_BSRR 0x00010000 r4 r5 @;Set_PortA_Bit(0,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x00080000 r4 r5	@;Set_PortC_Bit(3,0);
+	DirectWrite_Data MY_GPIOA_BSRR 0x00800000 r4 r5	@;Set_PortA_Bit(7,0);
+	DirectWrite_Data MY_GPIOA_BSRR 0x00100000 r4 r5	@;Set_PortA_Bit(4,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x00010000 r4 r5	@;Set_PortC_Bit(0,0);
+	DirectWrite_Data MY_GPIOA_BSRR 0x0002 r4 r5		@;Set_PortA_Bit(1,1);
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		@;Set_PortA_Bit(5,1);
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_1:
+	DirectWrite_Data MY_GPIOC_BSRR 0x0004 r4 r5		@;Set_PortC_Bit(2,1);
+	DirectWrite_Data MY_GPIOA_BSRR 0x00010000 r4 r5 @;Set_PortA_Bit(0,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x00080000 r4 r5	@;Set_PortC_Bit(3,0);
+	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5		@;Set_PortA_Bit(7,1);
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5		@;Set_PortA_Bit(4,1);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0001 r4 r5		@;Set_PortC_Bit(0,1);
+	DirectWrite_Data MY_GPIOA_BSRR 0x0002 r4 r5		@;Set_PortA_Bit(1,1);
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		@;Set_PortA_Bit(5,1);
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_2:
+	DirectWrite_Data MY_GPIOC_BSRR 0x00040000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00010000 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x0008 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x00800000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00100000 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x0001 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00020000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_3:
+	DirectWrite_Data MY_GPIOC_BSRR 0x00040000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00010000 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x00080000 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x00800000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x0001 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00020000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_4:
+	DirectWrite_Data MY_GPIOC_BSRR 0x0004 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00010000 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x00080000 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x00010000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00020000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_5:
+	DirectWrite_Data MY_GPIOC_BSRR 0x00040000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0001 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x00080000 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x00800000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x00010000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00020000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_6:
+	DirectWrite_Data MY_GPIOC_BSRR 0x00040000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0001 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x00080000 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x00800000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00100000 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x00010000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00020000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_7:
+	DirectWrite_Data MY_GPIOC_BSRR 0x00040000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00010000 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x00080000 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x0001 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0002 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_8:
+	DirectWrite_Data MY_GPIOC_BSRR 0x00040000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00010000 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x00080000 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x00800000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00100000 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x00010000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00020000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_9:
+	DirectWrite_Data MY_GPIOC_BSRR 0x00040000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00010000 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x00080000 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x00800000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x00010000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00020000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_a:
+	DirectWrite_Data MY_GPIOC_BSRR 0x00040000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00010000 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x00080000 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00100000 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x00010000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00020000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_b:
+	DirectWrite_Data MY_GPIOC_BSRR 0x0004 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0001 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x00080000 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x00800000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00100000 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x00010000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00020000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_c:
+	DirectWrite_Data MY_GPIOC_BSRR 0x0004 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0001 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x0008 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x00800000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00100000 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x0001 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00020000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_d:
+	DirectWrite_Data MY_GPIOC_BSRR 0x0004 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00010000 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x00080000 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x00800000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00100000 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x0001 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00020000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_e:
+	DirectWrite_Data MY_GPIOC_BSRR 0x00040000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0001 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x0008 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x00800000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00100000 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x00010000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00020000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_f:
+	DirectWrite_Data MY_GPIOC_BSRR 0x00040000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0001 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x0008 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00100000 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x00010000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00020000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+	
+ST_P24_Display_SetChar_dot:
+	DirectWrite_Data MY_GPIOC_BSRR 0x0004 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0001 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x0008 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x0001 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0002 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00200000 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_colon:
+	DirectWrite_Data MY_GPIOC_BSRR 0x00040000 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x00010000 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x0008 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x0001 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0002 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_qt:
+	DirectWrite_Data MY_GPIOC_BSRR 0x0004 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0001 r4 r5 
+	DirectWrite_Data MY_GPIOC_BSRR 0x00080000 r4 r5	
+	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5		
+	DirectWrite_Data MY_GPIOC_BSRR 0x0001 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0002 r4 r5		
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+ST_P24_Display_SetChar_NULL:	
+	DirectWrite_Data MY_GPIOC_BSRR 0x0004 r4 r5		@;Set_PortC_Bit(2,1);
+	DirectWrite_Data MY_GPIOA_BSRR 0x0001 r4 r5 	@;Set_PortA_Bit(0,1);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0008 r4 r5		@;Set_PortC_Bit(3,1);
+	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5		@;Set_PortA_Bit(7,1);
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5		@;Set_PortA_Bit(4,1);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0001 r4 r5		@;Set_PortC_Bit(0,1);
+	DirectWrite_Data MY_GPIOA_BSRR 0x0002 r4 r5		@;Set_PortA_Bit(1,1);
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		@;Set_PortA_Bit(5,1);
+	@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00200000 r4 r5	@;Set_PortC_Bit(5,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0020 r4 r5		@;Set_PortC_Bit(5,1);
+	bx lr
+
+.global ST_P24_Display_SlctSeg
+.thumb_func
+ST_P24_Display_SlctSeg:
+	and r0,r0,#0x7
+	mov r0, r0, lsl #1
+	add pc,pc,r0
+	nop
+ST_P24_Display_SlctSeg_BranchTable:
+	b ST_P24_Display_SlctSeg_0	@; 00
+	b ST_P24_Display_SlctSeg_1	@; 01
+	b ST_P24_Display_SlctSeg_2	@; 02
+	b ST_P24_Display_SlctSeg_3	@; 03
+	b ST_P24_Display_SlctSeg_4	@; 04
+
+	
+ST_P24_Display_SlctSeg_0:
+	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5		@;Set_PortA_Bit(7,1);
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5		@;Set_PortA_Bit(4,1);
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5		@;Set_PortA_Bit(5,1);
+			@;
+	DirectWrite_Data MY_GPIOA_BSRR 0x0001 r4 r5		@;Set_PortA_Bit(0,0);
+	DirectWrite_Data MY_GPIOA_BSRR 0x0082 r4 r5		@;Set_PortA_Bit(1,1);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0008 r4 r5		@;Set_PortC_Bit(3,1);
+	DirectWrite_Data MY_GPIOC_BSRR 0x00010000 r4 r5		@;Set_PortC_Bit(0,1);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0004 r4 r5		@;Set_PortC_Bit(2,1);
+			@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00100000 r4 r5		@;Set_PortC_Bit(4,0);
+	DirectWrite_Data MY_GPIOC_BSRR 0x0010 r4 r5		@;Set_PortC_Bit(4,1);
+	bx lr
+ST_P24_Display_SlctSeg_1:
+	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5
+			@;
+	DirectWrite_Data MY_GPIOA_BSRR 0x0001 r4 r5
+	DirectWrite_Data MY_GPIOA_BSRR 0x0082 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x00080000 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0001 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0004 r4 r5
+			@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00100000 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0010 r4 r5
+	bx lr
+ST_P24_Display_SlctSeg_2:
+	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5
+			@;
+	DirectWrite_Data MY_GPIOA_BSRR 0x0001 r4 r5
+	DirectWrite_Data MY_GPIOA_BSRR 0x00820000 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0008 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0001 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0004 r4 r5
+			@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00100000 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0010 r4 r5
+	bx lr
+ST_P24_Display_SlctSeg_3:
+	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5
+			@;
+	DirectWrite_Data MY_GPIOA_BSRR 0x00010000 r4 r5
+	DirectWrite_Data MY_GPIOA_BSRR 0x0082 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0008 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0001 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0004 r4 r5
+			@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00100000 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0010 r4 r5	
+	bx lr
+ST_P24_Display_SlctSeg_4:
+	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5
+			@;
+	DirectWrite_Data MY_GPIOA_BSRR 0x0001 r4 r5
+	DirectWrite_Data MY_GPIOA_BSRR 0x0082 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0008 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0001 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x00040000 r4 r5
+			@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00100000 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0010 r4 r5	
+	bx lr
+ST_P24_Display_SlctSeg_5:@;close
+	DirectWrite_Data MY_GPIOA_BSRR 0x0080 r4 r5
+	DirectWrite_Data MY_GPIOA_BSRR 0x0010 r4 r5
+	DirectWrite_Data MY_GPIOA_BSRR 0x0020 r4 r5
+			@;
+	DirectWrite_Data MY_GPIOA_BSRR 0x0001 r4 r5
+	DirectWrite_Data MY_GPIOA_BSRR 0x0082 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0008 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0001 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0004 r4 r5
+			@;
+	DirectWrite_Data MY_GPIOC_BSRR 0x00100000 r4 r5
+	DirectWrite_Data MY_GPIOC_BSRR 0x0010 r4 r5	
+	bx lr
+	
 .global ST_P24_DisplayIni
 .thumb_func
 ST_P24_DisplayIni:
@@ -294,67 +722,4 @@ ST_P24_DisplayIni:
 	str	r1, [r2, #12]
 	bx	lr
 
-	
-.global ST_P24_Display_On
-.thumb_func
-ST_P24_Display_On:
-	push	{r7, lr}
-	add	r7, sp, #0
-
-	mov.w	r0, #6
-	mov.w	r1, #0
-	bl	Set_PortA_Bit
-	
-	mov.w	r0, #1
-	mov.w	r1, #0
-	bl	Set_PortC_Bit
-	pop	{r7, pc}
-	nop
-	
-.global ST_P24_Display_Off
-.thumb_func
-ST_P24_Display_Off:
-	ldr		r2, =0x40020000
-    ldr		r1, =0x00000040
-    str	r1, [r2, #24]				@; a6 1
-    ldr		r2, =0x40020800
-    mov.w	r1, #2
-    str	r1, [r2, #24]				@; c1 1
-    bx	lr
-
-
-
-
-.global ST_P24_DisplayUpdate
-.thumb_func
-ST_P24_DisplayUpdate:
-	bx	lr
-	
-.global wrCATHODE_0
-.thumb_func
-wrCATHODE_0:
-	bx	lr
-	
-.global printHEX
-.thumb_func
-printHEX:
-	bx lr
-
-
-.global enabDIGIT_1
-.thumb_func
-enabDIGIT_1:
-
-	bx	lr
-
-.global displayEnab
-.thumb_func
-displayEnab:
-
- 	bx	lr
-
-.global DISPLAY_on
-.thumb_func
-DISPLAY_on:
-	bx	lr
 	

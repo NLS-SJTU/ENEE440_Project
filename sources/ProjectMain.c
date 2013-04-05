@@ -111,7 +111,7 @@ uint32_t BTN_Get(void) {
 //Done in asm ^
 
 unsigned int digitvals[4]= {1,2,3,4};			//global variable to hold the four digits being displayed 
-char DispContants[10] = {0,0,0,0,0,0,0,0,0,0};
+unsigned int DispContants[4] = {1,2,3,4};
 /*
 void display_update(void)
 {
@@ -153,41 +153,11 @@ int main (void) {
   //wrCATHODE_0();								//put pattern to display '0' on P24 cathode latch
   
   //printHEX(0);
-  ST_P24_Display_SetChar(':');
-  /*
-  Set_PortC_Bit(2,0);
-  Set_PortA_Bit(0,0);
-  Set_PortC_Bit(3,0);
-  Set_PortA_Bit(7,0);
-  Set_PortA_Bit(4,0);
-  Set_PortC_Bit(0,0);
-  Set_PortA_Bit(1,1);
-  Set_PortA_Bit(5,1);
-  
-  Set_PortC_Bit(5,0);
-  Set_PortC_Bit(5,1);
-  /**/
-  //enabDIGIT_1();								//put pattern to enable digit 1 on P24 anode latch
-  //displayEnab(3);
-  ST_P24_Display_SlctSeg(5);
-  /*
-  Set_PortA_Bit(7,1);
-  Set_PortA_Bit(4,1);
-  Set_PortA_Bit(5,1);
-  
-  Set_PortA_Bit(0,1);
-  Set_PortA_Bit(1,1);
-  Set_PortC_Bit(3,1);
-  Set_PortC_Bit(0,0);
-  Set_PortC_Bit(2,1);
-  
-  Set_PortC_Bit(4,0);
-  Set_PortC_Bit(4,1);
-  */
-  
-  //DISPLAY_on();									//enable output drive of P24 anode, cathode latches
-  Set_PortA_Bit(6,0);
-  Set_PortC_Bit(1,0);
+  ST_P24_Display_SetChar(1);
+  ST_P24_Display_SlctSeg(10);
+
+  ST_P24_Display_On();									//enable output drive of P24 anode, cathode latches
+
   while(1) {                                    // Loop forever               
 /*
 	for(i=1;i<=12;i++) {
@@ -205,6 +175,7 @@ int main (void) {
 
 		display_update();
 */
+ST_P24_DisplayUpdate(DispContants);
 /*	
 	Set_PortC_MODER(0,1)
 	Set_PortC_MODER(1,0)
