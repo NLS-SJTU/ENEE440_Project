@@ -26,7 +26,8 @@ arm-none-eabi-as -g -mcpu=cortex-m4 -I .\sources\basic .\sources\basic\GPIO.asm 
 
 arm-none-eabi-as -g -mcpu=cortex-m4 .\sources\drivers\ST_LED.asm -o aST_LED.o
 arm-none-eabi-as -g -mcpu=cortex-m4 .\sources\drivers\ST_BTN.asm -o aST_BTN.o
-arm-none-eabi-as -g -mcpu=cortex-m4 .\sources\drivers\ST_P24_SWITCH.asm -o aST_P24_SWITCH.o
+arm-none-eabi-as -g -mcpu=cortex-m4 -I .\sources\basic ^
+.\sources\drivers\ST_P24_SWITCH.asm -o aST_P24_SWITCH.o
 arm-none-eabi-as -g -mcpu=cortex-m4 -I .\sources\basic ^
 .\sources\drivers\ST_P24_DISPLAY.asm -o aST_P24_DISPLAY.o
 

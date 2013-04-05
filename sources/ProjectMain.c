@@ -110,7 +110,7 @@ uint32_t BTN_Get(void) {
 //int getSWITCH(int num);		 //return sampled value of switch
 //Done in asm ^
 
-unsigned int digitvals[4]= {1,2,3,4};			//global variable to hold the four digits being displayed 
+//unsigned int digitvals[4]= {1,2,3,4};			//global variable to hold the four digits being displayed 
 unsigned int DispContants[4] = {1,2,3,4};
 /*
 void display_update(void)
@@ -147,7 +147,7 @@ int main (void) {
 
 //	ST_LED_init(); 								//initialize onboard LEDs of ST32F4DISCOVERY board
 //	ST_BTN_init();								//initialize onboard switches of ST32F4DISCOVERY board
-//	ST_P24SWITCH_init(); 							//initialize ST32F4 pins controlling switches
+	ST_P24SWITCH_init(); 							//initialize ST32F4 pins controlling switches
  
   ST_P24_DisplayIni();							//initialize ST32F4 output pins controlling P24 display pins
   //wrCATHODE_0();								//put pattern to display '0' on P24 cathode latch
@@ -159,22 +159,19 @@ int main (void) {
   ST_P24_Display_On();									//enable output drive of P24 anode, cathode latches
 
   while(1) {                                    // Loop forever               
-/*
+
 	for(i=1;i<=12;i++) {
 		if(ST_P24_GetSwitch(i)==0) { //switch i is pressed
-			digitvals[0]=digitvals[1]=digitvals[2]=digitvals[3]=i;	//display 'i'
+			DispContants[0]=DispContants[1]=DispContants[2]=DispContants[3]=i;	//display 'i'
 			break;													//and quit search
 		}
 		else {
-			digitvals[0]=digitvals[1]=digitvals[2]=digitvals[3]=0;
+			DispContants[0]=DispContants[1]=DispContants[2]=DispContants[3]=31;
 		}
 	}
 
 
 
-
-		display_update();
-*/
 ST_P24_DisplayUpdate(DispContants);
 /*	
 	Set_PortC_MODER(0,1)

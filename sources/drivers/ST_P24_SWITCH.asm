@@ -1,3 +1,4 @@
+.include "../basic/stm32f4xx_RegDef.h"
 @;
 .syntax unified	@;to allow thumb-2 instruction set
 .thumb						@; Use thmb instructions only
@@ -211,3 +212,109 @@ ST_P24SWITCH_init:
 .global ST_P24_GetSwitch
 .thumb_func
 ST_P24_GetSwitch:
+
+.global ST_P24_GetSwitch
+.thumb_func
+ST_P24_GetSwitch:
+	sub r1,r0,#1
+	and r1,r1,#0xf
+	mov r1, r1, lsl #1
+	add pc,pc,r1
+	nop
+ST_P24_Display_GetSwitch_BranchTable:
+	b ST_P24_GetSwitch_1	@; 00
+	b ST_P24_GetSwitch_2	@; 00
+	b ST_P24_GetSwitch_3	@; 00
+	b ST_P24_GetSwitch_4	@; 00
+	b ST_P24_GetSwitch_5	@; 00
+	b ST_P24_GetSwitch_6	@; 00
+	b ST_P24_GetSwitch_7	@; 00
+	b ST_P24_GetSwitch_8	@; 00
+	b ST_P24_GetSwitch_9	@; 00
+	b ST_P24_GetSwitch_10	@; 00
+	b ST_P24_GetSwitch_11	@; 00
+	b ST_P24_GetSwitch_12	@; 00
+ST_P24_GetSwitch_1:
+	DirectWrite_Data MY_GPIOB_BSRR 0x02000000 r4 r5	 @; b9 = 0
+	DirectRead MY_GPIOB_IDR r0 r1
+	ands r0,r0,#0x01
+	mov r0,r0										@; return b0
+	DirectWrite_Data MY_GPIOB_BSRR 0x0200 r4 r5	 @; b9 = 1
+	bx lr
+ST_P24_GetSwitch_2:
+	DirectWrite_Data MY_GPIOB_BSRR 0x02000000 r4 r5	 @; b9 = 0
+	DirectRead MY_GPIOD_IDR r0 r1
+	ands r0,r0,#0x04
+	mov r0,r0, lsr #2										@; return d2
+	DirectWrite_Data MY_GPIOB_BSRR 0x0200 r4 r5	 @; b9 = 1
+	bx lr
+ST_P24_GetSwitch_3:
+	DirectWrite_Data MY_GPIOB_BSRR 0x02000000 r4 r5	 @; b9 = 0
+	DirectRead MY_GPIOB_IDR r0 r1
+	ands r0,r0,#0x02
+	mov r0,r0, lsr #1										@; return b1
+	DirectWrite_Data MY_GPIOB_BSRR 0x0200 r4 r5	 @; b9 = 1
+	bx lr
+ST_P24_GetSwitch_4:
+	DirectWrite_Data MY_GPIOB_BSRR 0x02000000 r4 r5	 @; b9 = 0
+	DirectRead MY_GPIOB_IDR r0 r1
+	ands r0,r0,#0x40
+	mov r0,r0, lsr #6										@; return b6
+	DirectWrite_Data MY_GPIOB_BSRR 0x0200 r4 r5	 @; b9 = 1
+	bx lr
+ST_P24_GetSwitch_5:
+	DirectWrite_Data MY_GPIOC_BSRR 0x04000000 r4 r5	 @; c10 = 0
+	DirectRead MY_GPIOB_IDR r0 r1
+	ands r0,r0,#0x01
+	mov r0,r0, lsr #0										@; return b0
+	DirectWrite_Data MY_GPIOC_BSRR 0x0400 r4 r5	 @; c10 = 1
+	bx lr
+ST_P24_GetSwitch_6:
+	DirectWrite_Data MY_GPIOC_BSRR 0x04000000 r4 r5	 @; c10 = 0
+	DirectRead MY_GPIOD_IDR r0 r1
+	ands r0,r0,#0x04
+	mov r0,r0, lsr #2										@; return d2
+	DirectWrite_Data MY_GPIOC_BSRR 0x0400 r4 r5	 @; c10 = 1
+	bx lr
+ST_P24_GetSwitch_7:
+	DirectWrite_Data MY_GPIOC_BSRR 0x04000000 r4 r5	 @; c10 = 0
+	DirectRead MY_GPIOB_IDR r0 r1
+	ands r0,r0,#0x02
+	mov r0,r0, lsr #1										@; return b1
+	DirectWrite_Data MY_GPIOC_BSRR 0x0400 r4 r5	 @; c10 = 1
+	bx lr
+ST_P24_GetSwitch_8:
+	DirectWrite_Data MY_GPIOC_BSRR 0x04000000 r4 r5	 @; c10 = 0
+	DirectRead MY_GPIOB_IDR r0 r1
+	ands r0,r0,#0x40
+	mov r0,r0, lsr #6										@; return b6
+	DirectWrite_Data MY_GPIOC_BSRR 0x0400 r4 r5	 @; c10 = 1
+	bx lr
+ST_P24_GetSwitch_9:
+	DirectWrite_Data MY_GPIOC_BSRR 0x08000000 r4 r5	 @; c11 = 0
+	DirectRead MY_GPIOB_IDR r0 r1
+	ands r0,r0,#0x01
+	mov r0,r0, lsr #0									@; return b0
+	DirectWrite_Data MY_GPIOC_BSRR 0x0800 r4 r5	 @; c11 = 1
+	bx lr
+ST_P24_GetSwitch_10:
+	DirectWrite_Data MY_GPIOC_BSRR 0x08000000 r4 r5	 @; c11 = 0
+	DirectRead MY_GPIOD_IDR r0 r1
+	ands r0,r0,#0x04
+	mov r0,r0, lsr #2									@; return d2
+	DirectWrite_Data MY_GPIOC_BSRR 0x0800 r4 r5	 @; c11 = 1
+	bx lr
+ST_P24_GetSwitch_11:
+	DirectWrite_Data MY_GPIOC_BSRR 0x08000000 r4 r5	 @; c11 = 0
+	DirectRead MY_GPIOB_IDR r0 r1
+	ands r0,r0,#0x02
+	mov r0,r0, lsr #1									@; return b1
+	DirectWrite_Data MY_GPIOC_BSRR 0x0800 r4 r5	 @; c11 = 1
+	bx lr
+ST_P24_GetSwitch_12:
+	DirectWrite_Data MY_GPIOC_BSRR 0x08000000 r4 r5	 @; c11 = 0
+	DirectRead MY_GPIOB_IDR r0 r1
+	ands r0,r0,#0x40
+	mov r0,r0, lsr #6									@; return b6
+	DirectWrite_Data MY_GPIOC_BSRR 0x0800 r4 r5	 @; c11 = 1
+	bx lr

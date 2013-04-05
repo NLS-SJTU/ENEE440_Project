@@ -3,11 +3,6 @@
 .thumb						@; Use thmb instructions only
 .data
 .bss
-.macro DirectWrite_Data PortFooAddr data_r temp_r1 temp_r2 @; data in reg1
-	ldr \temp_r1, =\PortFooAddr
-	ldr \temp_r2, =\data_r
-	str \temp_r2,[\temp_r1]
-.endm
 
 .text
 

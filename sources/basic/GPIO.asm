@@ -8,11 +8,6 @@
 
 .include "./stm32f4xx_RegDef.h"
 	
-.macro DirectWrite_Reg PortFooAddr data_r temp_r1 @; data in reg1
-	ldr \temp_r1, =\PortFooAddr
-	str \data_r,[\temp_r1]
-	
-.endm
 
 .macro SetVal_2bits_wl PortAddr ShiftVal_r SetVal_r temp_r1 temp_r2 temp_r3 	
 	cmp \ShiftVal_r, #15

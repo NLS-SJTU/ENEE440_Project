@@ -49,4 +49,21 @@
 	.equ MY_GPIOB_AFRH, 0x40020424
 	.equ MY_GPIOC_AFRH, 0x40020824
 	.equ MY_GPIOD_AFRH, 0x40020c24
+	
+.macro DirectWrite_Reg PortFooAddr data_r temp_r1 @; data in reg1
+	ldr \temp_r1, =\PortFooAddr
+	str \data_r,[\temp_r1]
+	
+.endm
+
+.macro DirectWrite_Data PortFooAddr data temp_r1 temp_r2 @; data in reg1
+	ldr \temp_r1, =\PortFooAddr
+	ldr \temp_r2, =\data
+	str \temp_r2,[\temp_r1]
+.endm
+
+.macro DirectRead PortFooAddr return_r temp_r1
+	ldr \temp_r1, =\PortFooAddr
+	ldr \return_r,[\temp_r1]
+.endm
 .endif
