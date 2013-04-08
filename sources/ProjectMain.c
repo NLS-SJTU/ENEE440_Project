@@ -45,7 +45,6 @@ void SysTick_Handler(void) {
   msTicks++;
   //if(msTicks==20){ST_P24_DisplayUpdate(DispContants);msTicks=0;}
   }
-
 /*----------------------------------------------------------------------------
   delays number of tick Systicks (happens every 1 ms)
  *----------------------------------------------------------------------------*/
