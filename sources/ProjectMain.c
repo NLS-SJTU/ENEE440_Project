@@ -112,6 +112,8 @@ int main (void) {
 
 
 	TIM2_Init();
+	TIM2_Config(16,1000);
+	TIM2_Start();
 	
 	
   while(1) {                                    // Loop forever               
