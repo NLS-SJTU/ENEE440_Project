@@ -257,8 +257,8 @@ TIM1_TRG_COM_TIM11_IRQHandler:
 .thumb_func
 TIM1_CC_IRQHandler:        
 .thumb_func
-TIM2_IRQHandler:           
-.thumb_func
+@;TIM2_IRQHandler:           
+@;.thumb_func
 TIM3_IRQHandler:           
 .thumb_func
 TIM4_IRQHandler:           

@@ -45,6 +45,11 @@ void SysTick_Handler(void) {
   msTicks++;
   //if(msTicks==20){ST_P24_DisplayUpdate(DispContants);msTicks=0;}
   }
+void TIM2_IRQHandler() {
+    if(TIM2->SR & TIM_SR_UIF != 0)                      // If update flag is set
+        GPIOD->BSRRL = GPIO_BSRR_BS_15;                 // Set D15 high
+    TIM2->SR &= ~TIM_SR_UIF;                            // Interrupt has been handled
+}
 /*----------------------------------------------------------------------------
   delays number of tick Systicks (happens every 1 ms)
  *----------------------------------------------------------------------------*/
@@ -99,6 +104,20 @@ int main (void) {
 										//enable output drive of P24 anode, cathode latches
 	DispContants[0]=DispContants[1]=DispContants[2]=DispContants[3]=31;
 	ST_P24_Display_On();	
+	
+	
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;                // Enable GPIOD clock
+    GPIOD->MODER |= GPIO_MODER_MODER15_0;               // Enable output mode for D15
+
+    RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;                 // Enable TIM2 clock
+    TIM2->PSC = 41999;                                  // Set prescaler to 41999
+    TIM2->ARR = 1000;                                   // Set auto-reload to 5999
+    TIM2->CR1 |= TIM_CR1_OPM;                           // One pulse mode	
+    TIM2->EGR |= TIM_EGR_UG;                            // Force update
+    TIM2->SR &= ~TIM_SR_UIF;                            // Clear the update flag
+    TIM2->DIER |= TIM_DIER_UIE;                         // Enable interrupt on update event
+    NVIC_EnableIRQ(TIM2_IRQn);                      // Enable TIM2 IRQ
+    TIM2->CR1 |= TIM_CR1_CEN;                           // Enable TIM2 counter
 
   while(1) {                                    // Loop forever               
 	
