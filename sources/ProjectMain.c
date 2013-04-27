@@ -26,6 +26,7 @@
 #include ".\basic\stm32f4xx.h"
 #include ".\basic\core_cm4.h"
 #include ".\basic\GPIO.h"
+#include ".\basic\TIM.h"
 
 #include ".\drivers\ST_LED.h"
 #include ".\drivers\ST_BTN.h"
@@ -38,6 +39,7 @@ extern uint32_t SystemCoreClock;
 volatile uint32_t msTicks;                    //counts 1ms timeTicks 
 unsigned int* DispContants;
 unsigned int freq_arr[4]={0,1,2,5};
+
 /*----------------------------------------------------------------------------
   SysTick_Handler
  *----------------------------------------------------------------------------*/
@@ -45,9 +47,14 @@ void SysTick_Handler(void) {
   msTicks++;
   //if(msTicks==20){ST_P24_DisplayUpdate(DispContants);msTicks=0;}
   }
-void TIM2_IRQHandler() {
+  
+ void TIM2_IRQHandler() {
+	
     if(TIM2->SR & TIM_SR_UIF != 0)                      // If update flag is set
+	{
         GPIOD->BSRRL = GPIO_BSRR_BS_15;                 // Set D15 high
+		ST_P24_DisplayUpdate(DispContants);
+	}
     TIM2->SR &= ~TIM_SR_UIF;                            // Interrupt has been handled
 }
 /*----------------------------------------------------------------------------
@@ -55,10 +62,6 @@ void TIM2_IRQHandler() {
  *----------------------------------------------------------------------------*/
 void Delay (uint32_t dlyTicks) {                                              
   uint32_t curTicks;
-
-//!!temporary -- replaced delay mediated by SysTick_Handler() with software delay
-//  curTicks = msTicks;
-//  while ((msTicks - curTicks) < dlyTicks);
   curTicks = 0x12345;
   while(curTicks-- > 0);
   return;
@@ -80,9 +83,7 @@ int main (void) {
  int32_t num = -1; 
  int32_t dir =  1;
  uint32_t btns = 0;
- unsigned int freq = 125;
-
- //unsigned int* freq_arr;
+ unsigned int freq=125;
 
  int i;
   SystemCoreClock = 168000000; 	//!!found in system_stm32f4xx.c, added here instead of as global
@@ -109,20 +110,15 @@ int main (void) {
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;                // Enable GPIOD clock
     GPIOD->MODER |= GPIO_MODER_MODER15_0;               // Enable output mode for D15
 
-    RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;                 // Enable TIM2 clock
-    TIM2->PSC = 41999;                                  // Set prescaler to 41999
-    TIM2->ARR = 1000;                                   // Set auto-reload to 5999
-    TIM2->CR1 |= TIM_CR1_OPM;                           // One pulse mode	
-    TIM2->EGR |= TIM_EGR_UG;                            // Force update
-    TIM2->SR &= ~TIM_SR_UIF;                            // Clear the update flag
-    TIM2->DIER |= TIM_DIER_UIE;                         // Enable interrupt on update event
-    NVIC_EnableIRQ(TIM2_IRQn);                      // Enable TIM2 IRQ
-    TIM2->CR1 |= TIM_CR1_CEN;                           // Enable TIM2 counter
 
+	TIM2_Init();
+	
+	
   while(1) {                                    // Loop forever               
 	
-	Conver_Int2Array(freq,freq_arr);
+	
 	for(i=1;i<=12;i++) {
+		Conver_Int2Array(freq,freq_arr);
 		if(ST_P24_GetSwitch(i)==0) 
 		{ //switch i is pressed
 			Delay(5);
@@ -156,10 +152,7 @@ int main (void) {
 				break;
 				case 9:
 					freq=125;
-					Conver_Int2Array(freq,freq_arr);
-					DispContants=freq_arr;
 					
-
 				break;
 				case 10:
 				break;
@@ -174,10 +167,11 @@ int main (void) {
 			}
 			
 		}
-
+	DispContants=freq_arr;
 	}
-	//Conver_Int2Array(freq,DispContants);
-	ST_P24_DisplayUpdate(DispContants);
+
+	
+	
 //ST_P24_LED_On_G(1);
 //					Set_PortC_Bit(3,1);
 	//				Set_PortC_Bit(5,0);
@@ -221,4 +215,3 @@ int main (void) {
 /**/
   }
 }
-
