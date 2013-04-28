@@ -40,6 +40,8 @@ volatile uint32_t msTicks;                    //counts 1ms timeTicks
 unsigned int* DispContants;
 unsigned int freq_arr[4]={0,1,2,5};
 
+
+
 /*----------------------------------------------------------------------------
   SysTick_Handler
  *----------------------------------------------------------------------------*/
