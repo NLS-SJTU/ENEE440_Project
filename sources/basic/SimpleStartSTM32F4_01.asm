@@ -8,10 +8,25 @@
 
 
  .syntax unified	@; to allow thumb-2 instruction set
+.section .stack
+.align 3
+.global _stack_start
+.global _stack_end
+_stack_end:
+.space 0x400
+_stack_start:
+
+.section .heap
+.align 3
+.global _heap_base
+.global _heap_limit
+_heap_base:
+.space 0x800
+_heap_limit:
 
  @; --- Vector table definition
- .section ".cs3.interrupt_vector"
- .long  __cs3_stack                 /* Top of Stack                 */
+ .section "isr_vector"
+ .long  _stack_start                 /* Top of Stack                 */
  .long  Reset_Handler               /* Reset Handler                */
  .long  NMI_Handler                 /* NMI Handler                  */
  .long  HardFault_Handler           /* Hard Fault Handler           */

@@ -377,6 +377,7 @@ arm-none-eabi-gcc ^
 -std=c99 -c -mthumb -O0 -g -mcpu=cortex-m4 -save-temps ^
 .\sources\ST_Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c -o c_stm32f4xx_tim.o
 ::linkBlinkySTM32F4_01
+::440linker
 echo linking...
 arm-none-eabi-gcc -nostartfiles -g -Wl,--no-gc-sections -Wl,-Map,.\objs\Blinky.map ^
 -Wl,-T .\linkers\linkBlinkySTM32F4_01.ld ^
