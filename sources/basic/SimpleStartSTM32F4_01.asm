@@ -153,7 +153,7 @@ zero_bss_loop:
 	@; necessary hardware stuff (todo: crib from disassembly of Keil initPLL.c)
 	initPLL:	@; !!todo -- fix this!				
 				@; put code here to set up PLL 
-	
+	bl SystemInit
 	@; do the 'C' global variable inits 'by hand' (since the above doesn't work)
 @;	bl CortexM3cOps_init @; !!todo -- fix this!	
 	@; do the asm variable inits 'by hand' (since the above doesnt work)
@@ -194,8 +194,8 @@ SVC_Handler:
 DebugMon_Handler:
 	.thumb_func
 PendSV_Handler:
-	.thumb_func
-SysTick_Handler:
+@;	.thumb_func
+@;SysTick_Handler:
 	bx  r14	 /* put a breakpoint here when we're */
 	/*debugging so we can trap here but then return to interrupted code */
 
@@ -214,8 +214,8 @@ FLASH_IRQHandler:
 RCC_IRQHandler:
 .thumb_func            
 EXTI0_IRQHandler:          
-.thumb_func
-EXTI1_IRQHandler:          
+@;.thumb_func
+@;EXTI1_IRQHandler:          
 .thumb_func
 EXTI2_IRQHandler:          
 .thumb_func
@@ -257,11 +257,11 @@ TIM1_TRG_COM_TIM11_IRQHandler:
 .thumb_func
 TIM1_CC_IRQHandler:        
 .thumb_func
-@;TIM2_IRQHandler:           
-@;.thumb_func
-TIM3_IRQHandler:           
+TIM2_IRQHandler:           
 .thumb_func
-TIM4_IRQHandler:           
+TIM3_IRQHandler:           
+@;.thumb_func
+@;TIM4_IRQHandler:           
 .thumb_func
 I2C1_EV_IRQHandler:        
 .thumb_func
@@ -374,4 +374,5 @@ SPI4_IRQHandler:
 SPI5_IRQHandler:  
 .thumb_func         
 SPI6_IRQHandler:
- 	bx  r14        
+ 	bx  r14
+    

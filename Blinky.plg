@@ -4,9 +4,25 @@
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
 C:\Users\Gauxonz\Documents\ENEE440\Project\Blinky.uvproj
-Project File Date:  04/08/2013
+Project File Date:  04/28/2013
 
 <h2>Output:</h2>
+Load "C:\\Users\\Gauxonz\\Documents\\ENEE440\\Project\\Blinky.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Load "C:\\Users\\Gauxonz\\Documents\\ENEE440\\Project\\Blinky.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Load "C:\\Users\\Gauxonz\\Documents\\ENEE440\\Project\\Blinky.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Load "C:\\Users\\Gauxonz\\Documents\\ENEE440\\Project\\Blinky.AXF" 
+Erase Done.
+Programming Failed!
+ST-LINK USB communication error
 Load "C:\\Users\\Gauxonz\\Documents\\ENEE440\\Project\\Blinky.AXF" 
 Erase Done.
 Programming Done.
