@@ -5,6 +5,7 @@ Thumbs.db
 *.obj
 *.o
 !aIOtest.obj
+!sources/
 *.elf
 *.hex
 *.AXF
