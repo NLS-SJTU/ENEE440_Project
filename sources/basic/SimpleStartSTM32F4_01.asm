@@ -6,23 +6,29 @@
  
 /* Simple startup file for Cortex-M3 */
 
+.macro WeakFunction fun 
+	.thumb_func
+	.weak \fun
+	\fun:
+.endm
 
- .syntax unified	@; to allow thumb-2 instruction set
-.section .stack
-.align 3
-.global _stack_start
-.global _stack_end
-_stack_end:
-.space 0x400
-_stack_start:
+.syntax unified	@; to allow thumb-2 instruction set
 
-.section .heap
-.align 3
-.global _heap_base
-.global _heap_limit
-_heap_base:
-.space 0x800
-_heap_limit:
+@;.section .stack
+@;.align 3
+@;.global _stack_start
+@;.global _stack_end
+@;_stack_end:
+@;.space 0x400
+@;_stack_start:
+@;
+@;.section .heap
+@;.align 3
+@;.global _heap_base
+@;.global _heap_limit
+@;_heap_base:
+@;.space 0x800
+@;_heap_limit:
 
  @; --- Vector table definition
  .section "isr_vector"
@@ -190,204 +196,102 @@ BSS_BEG:	.word	__sbss		@; __bss_beg__
 BSS_END:	.word	__ebss		@; __bss_end__
 
 
-/* This is how the lazy guy doing it: by aliasing all the
- * interrupts into single address
- */
-	.thumb_func
-NMI_Handler:
-	.thumb_func
-HardFault_Handler:
-	.thumb_func
-MemManage_Handler:
-	.thumb_func
-BusFault_Handler:
-	.thumb_func
-UsageFault_Handler:
-	.thumb_func
-SVC_Handler:
-	.thumb_func
-DebugMon_Handler:
-	.thumb_func
-PendSV_Handler:
-@;	.thumb_func
-@;SysTick_Handler:
-	bx  r14	 /* put a breakpoint here when we're */
-	/*debugging so we can trap here but then return to interrupted code */
+WeakFunction NMI_Handler
+WeakFunction HardFault_Handler
+WeakFunction MemManage_Handler
+WeakFunction BusFault_Handler
+WeakFunction UsageFault_Handler
+WeakFunction SVC_Handler
+WeakFunction DebugMon_Handler
+WeakFunction PendSV_Handler
+WeakFunction SysTick_Handler
 
- 
-.thumb_func
-WWDG_IRQHandler:           
-.thumb_func
-PVD_IRQHandler:            
-.thumb_func
-TAMP_STAMP_IRQHandler:
-.thumb_func     
-RTC_WKUP_IRQHandler:
-.thumb_func       
-FLASH_IRQHandler:
-.thumb_func        
-RCC_IRQHandler:
-.thumb_func            
-EXTI0_IRQHandler:          
-@;.thumb_func
-@;EXTI1_IRQHandler:          
-.thumb_func
-EXTI2_IRQHandler:          
-.thumb_func
-EXTI3_IRQHandler:          
-.thumb_func
-EXTI4_IRQHandler:          
-.thumb_func
-DMA1_Stream0_IRQHandler:   
-.thumb_func
-DMA1_Stream1_IRQHandler:   
-.thumb_func
-DMA1_Stream2_IRQHandler:   
-.thumb_func
-DMA1_Stream3_IRQHandler:   
-.thumb_func
-DMA1_Stream4_IRQHandler:   
-.thumb_func
-DMA1_Stream5_IRQHandler:   
-.thumb_func
-DMA1_Stream6_IRQHandler:   
-.thumb_func
-ADC_IRQHandler:            
-.thumb_func
-CAN1_TX_IRQHandler:        
-.thumb_func
-CAN1_RX0_IRQHandler:       
-.thumb_func
-CAN1_RX1_IRQHandler:       
-.thumb_func
-CAN1_SCE_IRQHandler:       
-.thumb_func
-EXTI9_5_IRQHandler:        
-.thumb_func
-TIM1_BRK_TIM9_IRQHandler:  
-.thumb_func
-TIM1_UP_TIM10_IRQHandler:  
-.thumb_func
-TIM1_TRG_COM_TIM11_IRQHandler:
-.thumb_func
-TIM1_CC_IRQHandler:        
-.thumb_func
-TIM2_IRQHandler:           
-.thumb_func
-TIM3_IRQHandler:           
-@;.thumb_func
-@;TIM4_IRQHandler:           
-.thumb_func
-I2C1_EV_IRQHandler:        
-.thumb_func
-I2C1_ER_IRQHandler:        
-.thumb_func
-I2C2_EV_IRQHandler:        
-.thumb_func
-I2C2_ER_IRQHandler:        
-.thumb_func
-SPI1_IRQHandler:           
-.thumb_func
-SPI2_IRQHandler:           
-.thumb_func
-USART1_IRQHandler:         
-.thumb_func
-USART2_IRQHandler:         
-.thumb_func
-USART3_IRQHandler:         
-.thumb_func
-EXTI15_10_IRQHandler:      
-.thumb_func
-RTC_Alarm_IRQHandler:      
-.thumb_func
-OTG_FS_WKUP_IRQHandler:    
-.thumb_func
-TIM8_BRK_TIM12_IRQHandler: 
-.thumb_func
-TIM8_UP_TIM13_IRQHandler:  
-.thumb_func
-TIM8_TRG_COM_TIM14_IRQHandler:
-.thumb_func
-TIM8_CC_IRQHandler:        
-.thumb_func
-DMA1_Stream7_IRQHandler:   
-.thumb_func
-FSMC_IRQHandler:           
-.thumb_func
-SDIO_IRQHandler:           
-.thumb_func
-TIM5_IRQHandler:           
-.thumb_func
-SPI3_IRQHandler:           
-.thumb_func
-UART4_IRQHandler:          
-.thumb_func
-UART5_IRQHandler:          
-.thumb_func
-TIM6_DAC_IRQHandler:       
-.thumb_func
-TIM7_IRQHandler:           
-.thumb_func
-DMA2_Stream0_IRQHandler:   
-.thumb_func
-DMA2_Stream1_IRQHandler:  
-.thumb_func 
-DMA2_Stream2_IRQHandler:   
-.thumb_func
-DMA2_Stream3_IRQHandler:   
-.thumb_func
-DMA2_Stream4_IRQHandler:   
-.thumb_func
-ETH_IRQHandler:            
-.thumb_func
-ETH_WKUP_IRQHandler:       
-.thumb_func
-CAN2_TX_IRQHandler:        
-.thumb_func
-CAN2_RX0_IRQHandler:       
-.thumb_func
-CAN2_RX1_IRQHandler:       
-.thumb_func
-CAN2_SCE_IRQHandler:       
-.thumb_func
-OTG_FS_IRQHandler:         
-.thumb_func
-DMA2_Stream5_IRQHandler:   
-.thumb_func
-DMA2_Stream6_IRQHandler:   
-.thumb_func
-DMA2_Stream7_IRQHandler:   
-.thumb_func
-USART6_IRQHandler:         
-.thumb_func
-I2C3_EV_IRQHandler:        
-.thumb_func
-I2C3_ER_IRQHandler:        
-.thumb_func
-OTG_HS_EP1_OUT_IRQHandler: 
-.thumb_func
-OTG_HS_EP1_IN_IRQHandler:  
-.thumb_func
-OTG_HS_WKUP_IRQHandler:    
-.thumb_func
-OTG_HS_IRQHandler:         
-.thumb_func
-DCMI_IRQHandler:           
-.thumb_func
-CRYP_IRQHandler:           
-.thumb_func
-HASH_RNG_IRQHandler:       
-.thumb_func
-FPU_IRQHandler:            
-.thumb_func
-UART7_IRQHandler:          
-.thumb_func
-UART8_IRQHandler:          
-.thumb_func
-SPI4_IRQHandler:           
-.thumb_func
-SPI5_IRQHandler:  
-.thumb_func         
-SPI6_IRQHandler:
- 	bx  r14
+WeakFunction WWDG_IRQHandler
+WeakFunction PVD_IRQHandler
+WeakFunction TAMP_STAMP_IRQHandler
+WeakFunction RTC_WKUP_IRQHandler
+WeakFunction FLASH_IRQHandler
+WeakFunction RCC_IRQHandler
+WeakFunction EXTI0_IRQHandler
+WeakFunction EXTI1_IRQHandler
+WeakFunction EXTI2_IRQHandler
+WeakFunction EXTI3_IRQHandler
+WeakFunction EXTI4_IRQHandler
+WeakFunction DMA1_Stream0_IRQHandler
+WeakFunction DMA1_Stream1_IRQHandler
+WeakFunction DMA1_Stream2_IRQHandler
+WeakFunction DMA1_Stream3_IRQHandler
+WeakFunction DMA1_Stream4_IRQHandler
+WeakFunction DMA1_Stream5_IRQHandler
+WeakFunction DMA1_Stream6_IRQHandler
+WeakFunction ADC_IRQHandler
+WeakFunction CAN1_TX_IRQHandler
+WeakFunction CAN1_RX0_IRQHandler
+WeakFunction CAN1_RX1_IRQHandler
+WeakFunction CAN1_SCE_IRQHandler
+WeakFunction EXTI9_5_IRQHandler
+WeakFunction TIM1_BRK_TIM9_IRQHandler
+WeakFunction TIM1_UP_TIM10_IRQHandler
+WeakFunction TIM1_TRG_COM_TIM11_IRQHandler
+WeakFunction TIM1_CC_IRQHandler
+WeakFunction TIM2_IRQHandler
+WeakFunction TIM3_IRQHandler
+WeakFunction TIM4_IRQHandler
+WeakFunction I2C1_EV_IRQHandler
+WeakFunction I2C1_ER_IRQHandler
+WeakFunction I2C2_EV_IRQHandler
+WeakFunction I2C2_ER_IRQHandler
+WeakFunction SPI1_IRQHandler
+WeakFunction SPI2_IRQHandler
+WeakFunction USART1_IRQHandler
+WeakFunction USART2_IRQHandler
+WeakFunction USART3_IRQHandler
+WeakFunction EXTI15_10_IRQHandler
+WeakFunction RTC_Alarm_IRQHandler
+WeakFunction OTG_FS_WKUP_IRQHandler
+WeakFunction TIM8_BRK_TIM12_IRQHandler
+WeakFunction TIM8_UP_TIM13_IRQHandler
+WeakFunction TIM8_TRG_COM_TIM14_IRQHandler
+WeakFunction TIM8_CC_IRQHandler
+WeakFunction DMA1_Stream7_IRQHandler
+WeakFunction FSMC_IRQHandler
+WeakFunction SDIO_IRQHandler
+WeakFunction TIM5_IRQHandler
+WeakFunction SPI3_IRQHandler
+WeakFunction UART4_IRQHandler
+WeakFunction UART5_IRQHandler
+WeakFunction TIM6_DAC_IRQHandler
+WeakFunction TIM7_IRQHandler
+WeakFunction DMA2_Stream0_IRQHandler
+WeakFunction DMA2_Stream1_IRQHandler
+WeakFunction DMA2_Stream2_IRQHandler
+WeakFunction DMA2_Stream3_IRQHandler
+WeakFunction DMA2_Stream4_IRQHandler
+WeakFunction ETH_IRQHandler
+WeakFunction ETH_WKUP_IRQHandler
+WeakFunction CAN2_TX_IRQHandler
+WeakFunction CAN2_RX0_IRQHandler
+WeakFunction CAN2_RX1_IRQHandler
+WeakFunction CAN2_SCE_IRQHandler
+WeakFunction OTG_FS_IRQHandler
+WeakFunction DMA2_Stream5_IRQHandler
+WeakFunction DMA2_Stream6_IRQHandler
+WeakFunction DMA2_Stream7_IRQHandler
+WeakFunction USART6_IRQHandler
+WeakFunction I2C3_EV_IRQHandler
+WeakFunction I2C3_ER_IRQHandler
+WeakFunction OTG_HS_EP1_OUT_IRQHandler
+WeakFunction OTG_HS_EP1_IN_IRQHandler
+WeakFunction OTG_HS_WKUP_IRQHandler
+WeakFunction OTG_HS_IRQHandler
+WeakFunction DCMI_IRQHandler
+WeakFunction CRYP_IRQHandler
+WeakFunction HASH_RNG_IRQHandler
+WeakFunction FPU_IRQHandler
+WeakFunction UART7_IRQHandler
+WeakFunction UART8_IRQHandler
+WeakFunction SPI4_IRQHandler
+WeakFunction SPI5_IRQHandler
+WeakFunction SPI6_IRQHandler
+bx  r14
     

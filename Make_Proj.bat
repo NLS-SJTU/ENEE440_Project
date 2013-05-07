@@ -32,9 +32,9 @@ arm-none-eabi-as -g -mcpu=cortex-m4 -I .\sources\drivers ^
 .\sources\drivers\ST_P24_DISPLAY.asm -o aST_P24_DISPLAY.o
 arm-none-eabi-as -g -mcpu=cortex-m4 -I .\sources\drivers ^
 .\sources\drivers\ST_P24_LED.asm -o aST_P24_LED.o
-::arm-none-eabi-gcc -I./  -c -mthumb -O0 -g -mcpu=cortex-m4 -save-temps ^
-::.\sources\basic\TIM.c -o aTIM.o
-arm-none-eabi-as -g -mcpu=cortex-m4 .\sources\basic\TIM.asm -o aTIM.o
+arm-none-eabi-gcc -I./  -c -mthumb -O0 -g -mcpu=cortex-m4 -save-temps ^
+.\sources\basic\TIM.c -o aTIM.o
+::arm-none-eabi-as -g -mcpu=cortex-m4 .\sources\basic\TIM.asm -o aTIM.o
 
 
 REM compiling drivers in c

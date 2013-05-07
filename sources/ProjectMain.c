@@ -98,8 +98,8 @@ int main (void) {
  
 
 
-	//ST_LED_init(); 								//initialize onboard LEDs of ST32F4DISCOVERY board
-	//ST_BTN_init();								//initialize onboard switches of ST32F4DISCOVERY board
+	ST_LED_init(); 								//initialize onboard LEDs of ST32F4DISCOVERY board
+	ST_BTN_init();								//initialize onboard switches of ST32F4DISCOVERY board
 	ST_P24SWITCH_init(); 							//initialize ST32F4 pins controlling switches
 	ST_P24_DisplayIni();							//initialize ST32F4 output pins controlling P24 display pins
 	ST_P24_Display_SetChar(31);
@@ -198,7 +198,7 @@ int main (void) {
 //	DWrite_PortC(2,0);
      
 /**/
-/*
+
 		btns = ST_BTN_Get();                      // Read button states 
 		if (btns != (1UL << 0)) { // Calculate 'num': 0,1,...,LED_NUM-1,LED_NUM-1,...,1,0,0,...  
 
